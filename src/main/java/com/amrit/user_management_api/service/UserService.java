@@ -143,4 +143,45 @@ public class UserService {
 
         return response;
     }
+
+    public PagedResponse<UserResponse> getUsersPaginatedPlusSortedAndFiltered(
+            int page,
+            int size,
+            String sortBy,
+            String direction,
+            Integer minAge,
+            String role
+    ) {
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+
+        Page<User> usersPage;
+
+        // Filtering logic
+        if (minAge != null && role != null) {
+            usersPage = userRepository.findByAgeGreaterThanEqualAndRole(minAge, role, pageRequest);
+        } else if (minAge != null) {
+            usersPage = userRepository.findByAgeGreaterThanEqual(minAge, pageRequest);
+        } else if (role != null) {
+            usersPage = userRepository.findByRole(role, pageRequest);
+        } else {
+            usersPage = userRepository.findAll(pageRequest);
+        }
+
+        // Mapping to DTO
+        List<UserResponse> users = usersPage.getContent().stream().map(this::mapToResponse).toList();
+
+        PagedResponse<UserResponse> response = new PagedResponse<>();
+        response.setContent(users);
+        response.setPage(usersPage.getNumber());
+        response.setSize(usersPage.getSize());
+        response.setTotalElements(usersPage.getTotalElements());
+        response.setTotalPages(usersPage.getTotalPages());
+
+        return response;
+    }
 }

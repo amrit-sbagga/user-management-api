@@ -10,7 +10,6 @@ import com.amrit.user_management_api.service.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -125,6 +124,22 @@ public class UserController {
     ) {
         return new ApiResponse<>("Users fetched successfully",
                 userService.getUsersPaginatedAndSorted(page, size, sortBy));
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/pageWithSortAndFilter")
+    public ApiResponse<PagedResponse<UserResponse>> getUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(required = false) Integer minAge,
+            @RequestParam(required = false) String role
+    ) {
+        return new ApiResponse<>(
+                "Users fetched successfully",
+                userService.getUsersPaginatedPlusSortedAndFiltered(page, size, sortBy, direction, minAge, role)
+        );
     }
 
 }

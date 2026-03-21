@@ -1,6 +1,8 @@
 package com.amrit.user_management_api.repository;
 
 import com.amrit.user_management_api.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -21,5 +23,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     // List<User> findAll(Sort sort);
     // Page<User> findAll(Pageable pageable);
+
+    Page<User> findByAgeGreaterThanEqual(Integer age, Pageable pageable);
+
+    Page<User> findByRole(String role, Pageable pageable);
+
+    Page<User> findByAgeGreaterThanEqualAndRole(Integer age, String role, Pageable pageable);
 
 }
