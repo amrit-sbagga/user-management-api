@@ -87,11 +87,12 @@ spring.profiles.active=dev
 4. Run the Application
 mvn spring-boot:run
 
+```
 
-🔐 Authentication Flow
+### **🔐 Authentication Flow**
 1. Login
-
 POST /auth/login
+
 
 {
 "username": "user1",
@@ -106,7 +107,7 @@ JWT Token
 In headers:
 Authorization: Bearer <your-token>
 
-📄 Swagger UI
+### 📄 Swagger UI
 
 Open in browser:
 http://localhost:8080/swagger-ui/index.html
@@ -119,23 +120,23 @@ Click Authorize
 Enter:
 Bearer <token>
 
-🔑 Roles & Access
+### 🔑 Roles & Access
+
 API	Access
-Create User	ADMIN
-Delete User	ADMIN
-Get Users	USER, ADMIN
+* Create User	- ADMIN
+* Delete User	- ADMIN
+* Get Users	- USER, ADMIN
 
-🧪 Testing
+### 🧪 Testing
 
-Run tests:
+**_Run tests:_**
 mvn test
 
-Skip tests:
+**_Skip tests:_**
 mvn clean install -DskipTests
 
 
-📌 Future Improvements
+### 📌 Future Improvements
 
-Pagination & Sorting
-Refresh Tokens
-Unit & Integration Tests
+* Refresh Tokens
+* Unit & Integration Tests
