@@ -1,12 +1,20 @@
 package com.amrit.user_management_api.dto.response;
 
 import com.amrit.user_management_api.dto.request.Role;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class UserResponse {
 
+    @Schema(example = "1")
     private int id;
+
+    @Schema(example = "monty1")
     private String username;
+
+    @Schema(example = "25")
     private Integer age;
+
+    @Schema(example = "USER")
     private Role role;
 
     public UserResponse() {}
