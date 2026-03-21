@@ -5,6 +5,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -13,17 +15,23 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // private final String SECRET_KEY = "mysecretkey123";
-   // private final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final SecretKey SECRET_KEY =
-            Keys.hmacShaKeyFor("myveryverysecretkeythatisatleast32characterslong".getBytes());
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    private SecretKey SECRET_KEY;
+
+    @PostConstruct
+    public void init() {
+        SECRET_KEY = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+    }
+
     public String generateToken(String username, Role role) {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("role", role.name())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hour
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(SECRET_KEY)
                 .compact();
     }
 

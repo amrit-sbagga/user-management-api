@@ -4,6 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +21,8 @@ import java.util.List;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
+    // private static final Logger log = LoggerFactory.getLogger(JwtFilter.class);
+
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -28,7 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        System.out.println("JWT Filter triggered");
+        // log.info("JWT Filter triggered");
 
         String authHeader = request.getHeader("Authorization");
 
@@ -49,7 +53,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 String username = jwtUtil.extractUsername(token);
 
                 String role = jwtUtil.extractRole(token);
-                System.out.println("Role from token: " + role);
+               // log.info("Role from token: " + role);
 
                 List<GrantedAuthority> authorities = List.of(
                         new SimpleGrantedAuthority("ROLE_" + role)

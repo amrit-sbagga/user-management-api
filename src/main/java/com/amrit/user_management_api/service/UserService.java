@@ -4,6 +4,8 @@ import com.amrit.user_management_api.dto.request.PagedResponse;
 import com.amrit.user_management_api.dto.response.UserResponse;
 import com.amrit.user_management_api.entity.User;
 import com.amrit.user_management_api.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,14 +13,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
-
 import static com.amrit.user_management_api.specification.UserSpecification.*;
 
 @Service
 public class UserService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -40,6 +42,7 @@ public class UserService {
         // 🔐 hash password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User saved = userRepository.save(user);
+        log.info("Creating user: {}", user.getUsername());
         return mapToResponse(saved);
     }
 
