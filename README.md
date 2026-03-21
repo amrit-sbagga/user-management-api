@@ -1,6 +1,6 @@
 # User Management API
 
-A Spring Boot backend application with JWT Authentication, Role-Based Authorization, Swagger UI, and MySQL integration.
+A Spring Boot backend application with JWT Authentication, Role-Based Authorization, Swagger UI, and Postgresql integration.
 
 ---
 
@@ -11,7 +11,7 @@ A Spring Boot backend application with JWT Authentication, Role-Based Authorizat
 - 🔑 Password Hashing using BCrypt
 - 📄 Swagger API Documentation
 - 🧾 DTO-based API responses (no password exposure)
-- 🗄️ MySQL Database Integration
+- 🗄️ postgresql Database Integration
 - ⚙️ Environment-based configuration
 
 ---
@@ -22,7 +22,7 @@ A Spring Boot backend application with JWT Authentication, Role-Based Authorizat
 - Spring Boot 3.x
 - Spring Security
 - Spring Data JPA
-- MySQL
+- Postgresql
 - JWT (jjwt)
 - Swagger (springdoc-openapi)
 
@@ -63,7 +63,7 @@ cd user-management-api
 
 Set the following environment variable:
 
-DB_PASSWORD=your_mysql_password
+DB_PASSWORD=your_postgresql_password
 
 👉 In IntelliJ:
 
@@ -75,7 +75,7 @@ application.properties
 
 spring.application.name=user-management-api
 
-spring.datasource.url=jdbc:mysql://localhost:3306/user_mgmt_db
+spring.datasource.url=jdbc:postgresql://localhost:5432/user_mgmt_db
 spring.datasource.username=root
 spring.datasource.password=${DB_PASSWORD}
 
