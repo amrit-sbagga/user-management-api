@@ -1,5 +1,6 @@
 package com.amrit.user_management_api.service;
 
+import com.amrit.user_management_api.dto.request.PagedResponse;
 import com.amrit.user_management_api.dto.response.UserResponse;
 import com.amrit.user_management_api.entity.User;
 import com.amrit.user_management_api.repository.UserRepository;
@@ -10,7 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -110,8 +113,36 @@ public class UserService {
                 .toList();
     }
 
-    public Page<UserResponse> getUsersPaginated(int page, int size) {
-        return userRepository.findAll(PageRequest.of(page, size))
-                .map(this::mapToResponse);
+    public PagedResponse<UserResponse> getUsersPaginated(int page, int size) {
+        Page<User> usersPage = userRepository.findAll(PageRequest.of(page, size));
+
+        List<UserResponse> users = usersPage.getContent().stream()
+                .map(this::mapToResponse).toList();
+
+        PagedResponse<UserResponse> response = new PagedResponse<>();
+        response.setContent(users);
+        response.setPage(usersPage.getNumber());
+        response.setSize(usersPage.getSize());
+        response.setTotalElements(usersPage.getTotalElements());
+        response.setTotalPages(usersPage.getTotalPages());
+
+        return response;
+    }
+
+    public PagedResponse<UserResponse> getUsersPaginatedAndSorted(int page, int size, String sortBy) {
+        Page<User> usersPage = userRepository.findAll(
+                PageRequest.of(page, size, Sort.by(sortBy).descending())
+        );
+        List<UserResponse> users = usersPage.getContent().stream()
+                .map(this::mapToResponse).toList();
+
+        PagedResponse<UserResponse> response = new PagedResponse<>();
+        response.setContent(users);
+        response.setPage(usersPage.getNumber());
+        response.setSize(usersPage.getSize());
+        response.setTotalElements(usersPage.getTotalElements());
+        response.setTotalPages(usersPage.getTotalPages());
+
+        return response;
     }
 }

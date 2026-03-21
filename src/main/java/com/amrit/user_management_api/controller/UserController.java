@@ -1,6 +1,7 @@
 package com.amrit.user_management_api.controller;
 
 import com.amrit.user_management_api.dto.request.CreateUserRequest;
+import com.amrit.user_management_api.dto.request.PagedResponse;
 import com.amrit.user_management_api.dto.request.UpdateUserRequest;
 import com.amrit.user_management_api.dto.ApiResponse;
 import com.amrit.user_management_api.dto.response.UserResponse;
@@ -28,7 +29,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping
+    @PostMapping("/create")
     public ApiResponse<UserResponse> createUser(@Valid @RequestBody CreateUserRequest request) {
        // User user = new User(request.getName(), request.getAge());
 
@@ -101,9 +102,9 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/page")
-    public ApiResponse<Page<UserResponse>> getUsersPage(
-            @RequestParam int page,
-            @RequestParam int size
+    public ApiResponse<PagedResponse<UserResponse>> getUsersPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size
     ) {
         return new ApiResponse<>("Users fetched successfully",
                 userService.getUsersPaginated(page, size));
@@ -113,6 +114,17 @@ public class UserController {
     @GetMapping("/sortByAge")
     public ApiResponse<List<UserResponse>> getUsersSortedByAge() {
         return new ApiResponse<>("Users fetched successfully", userService.getUsersSorted());
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/pageWithSort")
+    public ApiResponse<PagedResponse<UserResponse>> getUsersPaginatedAndSorted(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+        return new ApiResponse<>("Users fetched successfully",
+                userService.getUsersPaginatedAndSorted(page, size, sortBy));
     }
 
 }
