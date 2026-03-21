@@ -8,11 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.amrit.user_management_api.specification.UserSpecification.*;
 
 @Service
 public class UserService {
@@ -171,6 +174,49 @@ public class UserService {
         } else {
             usersPage = userRepository.findAll(pageRequest);
         }
+
+        // Mapping to DTO
+        List<UserResponse> users = usersPage.getContent().stream().map(this::mapToResponse).toList();
+
+        PagedResponse<UserResponse> response = new PagedResponse<>();
+        response.setContent(users);
+        response.setPage(usersPage.getNumber());
+        response.setSize(usersPage.getSize());
+        response.setTotalElements(usersPage.getTotalElements());
+        response.setTotalPages(usersPage.getTotalPages());
+
+        return response;
+    }
+
+
+    public PagedResponse<UserResponse> getUsersPaginatedPlusSortedAndFilteredUsingSpecification(
+            int page,
+            int size,
+            String sortBy,
+            String direction,
+            Integer minAge,
+            String role,
+            String username
+    ) {
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        PageRequest pageRequest = PageRequest.of(page, size, sort);
+
+//        Specification<User> spec = Specification
+//                .where(hasMinAge(minAge))
+//                .and(hasRole(role))
+//                .and(hasUsername(username));
+
+        Specification<User> spec = Specification.allOf(
+                hasMinAge(minAge),
+                hasRole(role),
+                hasUsername(username)
+        );
+
+        Page<User> usersPage = userRepository.findAll(spec, pageRequest);
 
         // Mapping to DTO
         List<UserResponse> users = usersPage.getContent().stream().map(this::mapToResponse).toList();

@@ -128,7 +128,7 @@ public class UserController {
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/pageWithSortAndFilter")
-    public ApiResponse<PagedResponse<UserResponse>> getUsers(
+    public ApiResponse<PagedResponse<UserResponse>> getUsersPaginatedPlusSortedAndFiltered(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "id") String sortBy,
@@ -139,6 +139,23 @@ public class UserController {
         return new ApiResponse<>(
                 "Users fetched successfully",
                 userService.getUsersPaginatedPlusSortedAndFiltered(page, size, sortBy, direction, minAge, role)
+        );
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/pageWithSortAndFilterUsingSpecification")
+    public ApiResponse<PagedResponse<UserResponse>> getUsersPaginatedPlusSortedAndFilteredUsingSpecification(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(required = false) Integer minAge,
+            @RequestParam(required = false) String role,
+            @RequestParam(required = false) String username
+    ) {
+        return new ApiResponse<>(
+                "Users fetched successfully",
+                userService.getUsersPaginatedPlusSortedAndFilteredUsingSpecification(page, size, sortBy, direction, minAge, role, username)
         );
     }
 
