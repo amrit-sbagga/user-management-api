@@ -1,142 +1,153 @@
-# User Management API
+# 🚀 User Management API (Spring Boot + Docker + PostgreSQL)
 
-A Spring Boot backend application with JWT Authentication, Role-Based Authorization, Swagger UI, and Postgresql integration.
-
----
-
-## 🚀 Features
-
-- 🔐 JWT Authentication
-- 👥 Role-Based Access Control (ADMIN / USER)
-- 🔑 Password Hashing using BCrypt
-- 📄 Swagger API Documentation
-- 🧾 DTO-based API responses (no password exposure)
-- 🗄️ postgresql Database Integration
-- ⚙️ Environment-based configuration
+A production-ready backend application built using **Spring Boot**, featuring authentication, role-based access, pagination, filtering, and cloud deployment.
 
 ---
 
-## 🛠️ Tech Stack
+## 🌐 Live Demo
 
-- Java 17
-- Spring Boot 3.x
-- Spring Security
-- Spring Data JPA
-- Postgresql
-- JWT (jjwt)
-- Swagger (springdoc-openapi)
+* 🔗 API Base URL: `https://user-management-api-z6et.onrender.com`
+* 🔗 Swagger UI: `https://user-management-api-z6et.onrender.com/swagger-ui/index.html`
+* 🔗 Health Check: `https://user-management-api-z6et.onrender.com/actuator/health`
 
 ---
 
-## 📂 Project Structure
-com.amrit.user_management_api
+## 🧰 Tech Stack
 
-
-├── controller
-
-├── service
-
-├── repository
-
-├── entity
-
-├── dto
-
-├── security
-
-├── exception
-
-└── config
-
+* **Backend:** Spring Boot, Spring Security, Spring Data JPA
+* **Database:** PostgreSQL (Render) / MySQL (Local)
+* **Authentication:** JWT (JSON Web Token)
+* **Build Tool:** Maven
+* **Containerization:** Docker, Docker Compose
+* **Cloud Deployment:** Render
 
 ---
 
-## ⚙️ Setup Instructions
+## ✨ Features
+
+* 🔐 JWT-based Authentication (Login API)
+* 👥 Role-based Authorization (USER / ADMIN)
+* 📄 Pagination & Sorting APIs
+* 🔍 Dynamic Filtering using Specifications
+* 📊 Actuator Health Monitoring
+* 📘 Swagger API Documentation
+* 🐳 Dockerized setup (App + DB)
+* ☁️ Deployed on Render (Production-ready)
+
+---
+
+## 📦 API Endpoints
+
+### 🔑 Auth APIs
+
+* `POST /auth/login` → Generate JWT token
+
+### 👤 User APIs
+
+* `POST /users` → Create user
+* `GET /users/userlist` → Get all users
+* `GET /users/page` → Paginated users
+* `GET /users/search` → Filter users
+
+> 🔐 Protected APIs require Bearer Token
+
+---
+
+## ⚙️ Local Setup (Without Docker)
 
 ```bash
-1. Clone the repository
-
+# Clone repo
 git clone <your-repo-url>
+
+# Navigate
 cd user-management-api
 
-2. Configure Environment Variables
+# Build project
+mvn clean install
 
-Set the following environment variable:
-
-DB_PASSWORD=your_postgresql_password
-
-👉 In IntelliJ:
-
-Run Configurations → Environment Variables
-
-3. Application Properties
-
-application.properties
-
-spring.application.name=user-management-api
-
-spring.datasource.url=jdbc:postgresql://localhost:5432/user_mgmt_db
-spring.datasource.username=root
-spring.datasource.password=${DB_PASSWORD}
-
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-
-spring.profiles.active=dev
-4. Run the Application
+# Run app
 mvn spring-boot:run
-
 ```
 
-### **🔐 Authentication Flow**
-1. Login
-POST /auth/login
+---
 
+## 🐳 Docker Setup (Recommended)
 
-{
-"username": "user1",
-"password": "password"
-}
+### ▶️ Run Application
 
-👉 Response:
-JWT Token
+```bash
+docker compose up --build
+```
 
-2. Use Token
+### ⛔ Stop Application
 
-In headers:
-Authorization: Bearer <your-token>
+```bash
+docker compose down -v
+```
 
-### 📄 Swagger UI
+---
 
-Open in browser:
-http://localhost:8080/swagger-ui/index.html
+## 🔐 Environment Variables
 
-Steps:
-Call /auth/login
-Copy token
-Click Authorize
+Create a `.env` file in root:
 
-Enter:
-Bearer <token>
+```env
+DB_URL=jdbc:mysql://mysql-db:3306/user_mgmt_db
+DB_USERNAME=<<your_db_username_here>>
+DB_PASSWORD=<<your_db_password_here>>
+JWT_SECRET=<<your_secret_key_here>>
+```
 
-### 🔑 Roles & Access
+---
 
-API	Access
-* Create User	- ADMIN
-* Delete User	- ADMIN
-* Get Users	- USER, ADMIN
+## 🧪 Running Tests
 
-### 🧪 Testing
-
-**_Run tests:_**
+```bash
 mvn test
+```
 
-**_Skip tests:_**
-mvn clean install -DskipTests
+---
 
+## ⚙️ Configuration
 
-### 📌 Future Improvements
+### Profiles
 
-* Refresh Tokens
-* Unit & Integration Tests
+* `dev` → Local development (MySQL, debug logs)
+* `prod` → Production (PostgreSQL, optimized logs)
+
+---
+
+## 🚀 Deployment (Render)
+
+1. Push code to GitHub
+2. Create Web Service in Render
+3. Add environment variables:
+
+    * `DB_URL`
+    * `DB_USERNAME`
+    * `DB_PASSWORD`
+    * `JWT_SECRET`
+4. Deploy 🚀
+
+---
+
+## 🛠️ Future Improvements
+
+* ✅ Global Exception Handling
+* 🔄 Refresh Token mechanism
+* 📈 Rate Limiting
+* 🔐 Secure Swagger with Authentication
+* ⚙️ CI/CD Pipeline (GitHub Actions)
+* 🌍 Custom Domain + Nginx
+
+---
+
+## 👨‍💻 Author
+
+**Amrit Singh**
+
+---
+
+## ⭐ If you like this project
+
+Give it a ⭐ on GitHub!
